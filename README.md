@@ -2,11 +2,11 @@
 
 ## Description
 
-NextForms is an innovative form builder project developed using Next.js 13 with AppRouter, leveraging the Dnd-kit library for a seamless drag-and-drop interface. This project employs ServerActions and Typescript, integrating Tailwind CSS and Shadcn UI for a stunning user interface. It is hosted on Vercel and uses PostgreSQL managed by Vercel and Prisma as its ORM.
+NextForms is an innovative form builder project developed using Next.js 14 with AppRouter, leveraging the Dnd-kit library for a seamless drag-and-drop interface. This project employs ServerActions and Typescript, integrating Tailwind CSS and Shadcn UI for a stunning user interface. It is hosted on Vercel and uses PostgreSQL managed by Vercel and Prisma as its ORM.
 
 ## Tech Stack
 
-- Next.js 13 with AppRouter
+- Next.js 14 with AppRouter
 - Dnd-kit library
 - ServerActions
 - Typescript
@@ -44,16 +44,3 @@ Once the project is set up and running, follow these steps to use NextForms:
 3. Preview the form layout before finalizing.
 4. Share the generated form URL for collaboration or submissions.
 5. Track form stats including visits and submissions.
-
-## Contributions
-
-Contributions to enhance features, fix issues, or optimize code are welcome! Please follow the contribution guidelines and code of conduct.
-
-## License
-
-This project is licensed under the [License Name] License - see the [LICENSE.md](link-to-license-file) file for details.
-
-## Acknowledgements
-
-- Acknowledge any contributors or resources used in the project development.
-- Provide any necessary credits or attributions.
