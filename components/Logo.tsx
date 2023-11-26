@@ -7,7 +7,7 @@ const Logo = () => {
       href={"/"}
       className="text-3xl font-bold  tracking-wider hover:cursor-pointer"
     >
-      Forms
+      NextForms
     </Link>
   );
 };

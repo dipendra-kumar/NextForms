@@ -110,3 +110,53 @@ export async function publishForm(id: number) {
     },
   });
 }
+
+export async function getFormContentByUrl(formUrl: string) {
+  return await prisma.form.update({
+    select: {
+      content: true,
+    },
+    data: {
+      visits: {
+        increment: 1,
+      },
+    },
+    where: {
+      shareUrl: formUrl,
+    },
+  });
+}
+
+export async function SubmitForm(formUrl: string, jsonContent: string) {
+  return await prisma.form.update({
+    data: {
+      submissions: {
+        increment: 1,
+      },
+      FormSubmissions: {
+        create: {
+          content: jsonContent,
+        },
+      },
+    },
+    where: {
+      shareUrl: formUrl,
+      published: true,
+    },
+  });
+}
+
+export async function GetFormSubmissions(id: number) {
+  const user = await currentUser();
+  if (!user) throw new UserNotFoundError();
+
+  return await prisma.form.findUnique({
+    where: {
+      userId: user.id,
+      id,
+    },
+    include: {
+      FormSubmissions: true,
+    },
+  });
+}

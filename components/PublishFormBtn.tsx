@@ -13,15 +13,31 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "./ui/alert-dialog";
-import { FaIcons } from "react-icons/fa";
+import { FaSpinner } from "react-icons/fa";
 import { toast } from "./ui/use-toast";
-import { publishForm } from "@/actions/form";
+import { publishForm, updateForm } from "@/actions/form";
 
 import { useRouter } from "next/navigation";
+import useDesigner from "./hooks/useDesigner";
 
 const PublishFormBtn = ({ id }: { id: number }) => {
+  const { elements } = useDesigner();
   const [loading, startTransition] = useTransition();
   const router = useRouter();
+
+  const updateFormContent = async () => {
+    try {
+      const jsonElements = JSON.stringify(elements);
+      await updateForm(id, jsonElements);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Something went wrong.",
+        variant: "destructive",
+      });
+    }
+  };
+
   async function PublishForm() {
     try {
       await publishForm(id);
@@ -68,10 +84,11 @@ const PublishFormBtn = ({ id }: { id: number }) => {
             disabled={loading}
             onClick={(e) => {
               e.preventDefault();
+              startTransition(updateFormContent);
               startTransition(PublishForm);
             }}
           >
-            Proceed {loading && <FaIcons className="animate-spin" />}
+            Proceed {loading && <FaSpinner className="animate-spin" />}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

@@ -1,9 +1,10 @@
 "use client";
+
 import { Form } from "@prisma/client";
 import React, { useEffect, useState } from "react";
 import PreviewDialogBtn from "./PreviewDialogBtn";
-import SaveFormBtn from "./SaveFormBtn";
 import PublishFormBtn from "./PublishFormBtn";
+import SaveFormBtn from "./SaveFormBtn";
 import Designer from "./Designer";
 import {
   DndContext,
@@ -22,27 +23,33 @@ import Link from "next/link";
 import { BsArrowLeft, BsArrowRight } from "react-icons/bs";
 import Confetti from "react-confetti";
 
-const FormBuilder = ({ form }: { form: Form }) => {
-  const { setElements } = useDesigner();
-  const [isReady, setIsReady] = useState<boolean>(false);
+function FormBuilder({ form }: { form: Form }) {
+  const { setElements, setSelectedElement } = useDesigner();
+  const [isReady, setIsReady] = useState(false);
+
   const mouseSensor = useSensor(MouseSensor, {
-    activationConstraint: { distance: 1 },
+    activationConstraint: {
+      distance: 10, // 10px
+    },
   });
+
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: {
       delay: 300,
       tolerance: 5,
     },
   });
+
   const sensors = useSensors(mouseSensor, touchSensor);
 
   useEffect(() => {
     if (isReady) return;
     const elements = JSON.parse(form.content);
     setElements(elements);
+    setSelectedElement(null);
     const readyTimeout = setTimeout(() => setIsReady(true), 500);
     return () => clearTimeout(readyTimeout);
-  }, [form, setElements]);
+  }, [form, setElements, isReady, setSelectedElement]);
 
   if (!isReady) {
     return (
@@ -51,25 +58,26 @@ const FormBuilder = ({ form }: { form: Form }) => {
       </div>
     );
   }
-  const shareUrl: string = `${window.location.origin}/submit/${form.shareUrl}`;
+
+  const shareUrl = `${window.location.origin}/submit/${form.shareUrl}`;
 
   if (form.published) {
     return (
       <>
         <Confetti
-          recycle={false}
-          height={window.innerHeight}
           width={window.innerWidth}
-          numberOfPieces={500}
+          height={window.innerHeight}
+          recycle={false}
+          numberOfPieces={1000}
         />
-        <div className="flex h-full w-full flex-col items-center justify-center ">
+        <div className="flex h-full w-full flex-col items-center justify-center">
           <div className="max-w-md">
             <h1 className="mb-10 border-b pb-2 text-center text-4xl font-bold text-primary">
-              🎊 Form Published 🎊
+              🎊🎊 Form Published 🎊🎊
             </h1>
             <h2 className="text-2xl">Share this form</h2>
             <h3 className="border-b pb-10 text-xl text-muted-foreground">
-              Anyone with the link can view and submit the form.
+              Anyone with the link can view and submit the form
             </h3>
             <div className="my-4 flex w-full flex-col items-center gap-2 border-b pb-4">
               <Input className="w-full" readOnly value={shareUrl} />
@@ -79,7 +87,7 @@ const FormBuilder = ({ form }: { form: Form }) => {
                   navigator.clipboard.writeText(shareUrl);
                   toast({
                     title: "Copied!",
-                    description: "Link copied to the clipboard.",
+                    description: "Link copied to clipboard",
                   });
                 }}
               >
@@ -88,13 +96,14 @@ const FormBuilder = ({ form }: { form: Form }) => {
             </div>
             <div className="flex justify-between">
               <Button variant={"link"} asChild>
-                <Link href={"/"}>
-                  <BsArrowLeft /> &nbsp; Go back to home
+                <Link href={"/"} className="gap-2">
+                  <BsArrowLeft />
+                  Go back home
                 </Link>
               </Button>
               <Button variant={"link"} asChild>
-                <Link href={"/"}>
-                  Form details &nbsp;
+                <Link href={`/forms/${form.id}`} className="gap-2">
+                  Form details
                   <BsArrowRight />
                 </Link>
               </Button>
@@ -108,9 +117,9 @@ const FormBuilder = ({ form }: { form: Form }) => {
   return (
     <DndContext sensors={sensors}>
       <main className="flex w-full flex-col">
-        <nav className="flex items-center justify-between gap-3 border-b-2 p-4 ">
-          <h2>
-            <span className="mr-2 text-muted-foreground">Form: </span>
+        <nav className="flex items-center justify-between gap-3 border-b-2 p-4">
+          <h2 className="truncate font-medium">
+            <span className="mr-2 text-muted-foreground">Form:</span>
             {form.name}
           </h2>
           <div className="flex items-center gap-2">
@@ -130,6 +139,6 @@ const FormBuilder = ({ form }: { form: Form }) => {
       <DragOverlayWrapper />
     </DndContext>
   );
-};
+}
 
 export default FormBuilder;

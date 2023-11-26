@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ReactNode, Suspense } from "react";
+import { Suspense } from "react";
 import { LuView } from "react-icons/lu";
 import { FaWpforms } from "react-icons/fa";
 import { HiCursorClick } from "react-icons/hi";
@@ -23,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { BiRightArrowAlt } from "react-icons/bi";
 import { FaEdit } from "react-icons/fa";
+import StatCard from "@/components/StatCard";
 
 const Home = () => {
   return (
@@ -31,9 +32,9 @@ const Home = () => {
         <CardStatsWrapper />
       </Suspense>
       <Separator className="my-6" />
-      <h2 className="text-4xl font-bold col-span-2">Your Forms</h2>
+      <h2 className="col-span-2 text-4xl font-bold">Your Forms</h2>
       <Separator className="my-6" />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         <CreateFormButton />
         <Suspense
           fallback={[1, 2, 3, 4, 5].map((el) => (
@@ -60,7 +61,7 @@ interface StatsCardProps {
 function StatsCards(props: StatsCardProps) {
   const { data, loading } = props;
   return (
-    <div className="w-full pt-8 gap-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">
+    <div className="grid w-full grid-cols-1 gap-4 pt-8 md:grid-cols-2 lg:grid-cols-4">
       <StatCard
         title="Total Visits"
         icon={<LuView className="text-blue-600" />}
@@ -93,44 +94,8 @@ function StatsCards(props: StatsCardProps) {
   );
 }
 
-function StatCard({
-  title,
-  helperText,
-  value,
-  loading,
-  icon,
-}: {
-  title: string;
-  value: string;
-  helperText: string;
-  loading: boolean;
-  icon: ReactNode;
-}) {
-  return (
-    <Card className="shadow-xl">
-      <CardHeader className="flex flex-row items-center justify-between pb-2`">
-        <CardTitle className="text-sm font-medium text-muted-foreground">
-          {title}
-        </CardTitle>
-        {icon}
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">
-          {loading && (
-            <Skeleton>
-              <span className="opacity-0">0</span>
-            </Skeleton>
-          )}
-          {!loading && value}
-        </div>
-        <p className="text-xs text-muted-foreground pt-1">{helperText}</p>
-      </CardContent>
-    </Card>
-  );
-}
-
 function FormCardSkeleton() {
-  return <Skeleton className="border-2 border-primary/20 h-[190px] w-full" />;
+  return <Skeleton className="h-[190px] w-full border-2 border-primary/20" />;
 }
 async function FormCards() {
   const forms = await getForms();
@@ -147,7 +112,7 @@ function FormCard({ form }: { form: Form }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2 justify-between">
+        <CardTitle className="flex items-center justify-between gap-2">
           <span className="truncate font-bold">{form.name}</span>
           {form.published ? (
             <Badge>Published</Badge>
@@ -155,7 +120,7 @@ function FormCard({ form }: { form: Form }) {
             <Badge variant={"destructive"}>Draft</Badge>
           )}
         </CardTitle>
-        <CardDescription className="flex items-center justify-between text-muted-foreground text-sm">
+        <CardDescription className="flex items-center justify-between text-sm text-muted-foreground">
           {formatDistance(form.createdAt, new Date(), { addSuffix: true })}
           {form.published && (
             <span className="flex items-center gap-2">
@@ -172,7 +137,7 @@ function FormCard({ form }: { form: Form }) {
       </CardContent>
       <CardFooter>
         {form.published && (
-          <Button asChild className="w-full mt-2 gap-4 text-md">
+          <Button asChild className="text-md mt-2 w-full gap-4">
             <Link href={`/forms/${form.id}`}>
               View Submissions <BiRightArrowAlt />
             </Link>
@@ -182,7 +147,7 @@ function FormCard({ form }: { form: Form }) {
           <Button
             variant={"secondary"}
             asChild
-            className="w-full mt-2 gap-4 text-md"
+            className="text-md mt-2 w-full gap-4"
           >
             <Link href={`/builder/${form.id}`}>
               Edit form <FaEdit />

@@ -42,10 +42,10 @@ const DragOverlayWrapper = () => {
       node = <div>Element not found</div>;
     } else {
       const DesignerElementComponent =
-        FormElements[element.type].designerComonent;
+        FormElements[element.type].designerComponent;
 
       node = (
-        <div className="flex bg-accent border rounded-md h-[120px] w-full py-2 px-4 opacity-50 pointer-events-none">
+        <div className="pointer-events-none flex h-[120px] w-full rounded-md border bg-accent px-4 py-2 opacity-50">
           <DesignerElementComponent elementInstance={element} />
         </div>
       );
