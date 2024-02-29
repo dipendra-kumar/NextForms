@@ -111,6 +111,36 @@ export async function publishForm(id: number) {
   });
 }
 
+export async function deleteForm(id: number) {
+  const user = await currentUser();
+  if (!user) throw new UserNotFoundError();
+  const existingForm = await prisma.form.findUnique({
+    where: {
+      userId: user.id,
+      id,
+    },
+    include: {
+      FormSubmissions: true, // Include related submissions
+    },
+  });
+
+  if (!existingForm) {
+    throw new Error("Form not found");
+  }
+
+  await prisma.formSubmissions.deleteMany({
+    where: {
+      formId: existingForm?.id,
+    },
+  });
+
+  return await prisma.form.delete({
+    where: {
+      id: existingForm?.id,
+    },
+  });
+}
+
 export async function getFormContentByUrl(formUrl: string) {
   return await prisma.form.update({
     select: {

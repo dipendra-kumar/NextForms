@@ -3,6 +3,7 @@ import { ElementsType, FormElementInstance } from "@/components/FormElements";
 import FormLinkShare from "@/components/FormLinkShare";
 import StatCard from "@/components/StatCard";
 import VisitBtn from "@/components/VisitBtn";
+import DeleteFormButton from "@/components/DeleteFormBtn";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
@@ -44,7 +45,10 @@ const FormDetailsPage = async ({
       <div className="border-b border-muted py-10">
         <div className="container flex justify-between">
           <h1 className="truncate text-4xl font-bold">{form.name}</h1>
+          <div className="flex gap-3">
           <VisitBtn shareUrl={form.shareUrl} />
+          <DeleteFormButton id={form.id}/>
+            </div>
         </div>
       </div>
       <div className="border-b border-muted py-4">

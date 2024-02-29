@@ -24,6 +24,7 @@ import Link from "next/link";
 import { BiRightArrowAlt } from "react-icons/bi";
 import { FaEdit } from "react-icons/fa";
 import StatCard from "@/components/StatCard";
+import DeleteFromButton from "@/components/DeleteFormBtn";
 
 const Home = () => {
   return (
@@ -115,9 +116,9 @@ function FormCard({ form }: { form: Form }) {
         <CardTitle className="flex items-center justify-between gap-2">
           <span className="truncate font-bold">{form.name}</span>
           {form.published ? (
-            <Badge>Published</Badge>
+            <Badge variant={"default"}>Published</Badge>
           ) : (
-            <Badge variant={"destructive"}>Draft</Badge>
+            <Badge variant={"secondary"}>Draft</Badge>
           )}
         </CardTitle>
         <CardDescription className="flex items-center justify-between text-sm text-muted-foreground">
@@ -144,15 +145,18 @@ function FormCard({ form }: { form: Form }) {
           </Button>
         )}
         {!form.published && (
-          <Button
-            variant={"secondary"}
-            asChild
-            className="text-md mt-2 w-full gap-4"
-          >
-            <Link href={`/builder/${form.id}`}>
-              Edit form <FaEdit />
-            </Link>
-          </Button>
+          <div className="w-full flex flex-row gap-3 items-center justify-center mt-2">
+            <Button
+              variant={"secondary"}
+              asChild
+              className="text-md w-full gap-4"
+            >
+              <Link href={`/builder/${form.id}`}>
+                Edit form <FaEdit />
+              </Link>
+            </Button>
+            <DeleteFromButton id={form.id} />
+          </div>
         )}
       </CardFooter>
     </Card>
